@@ -93,4 +93,4 @@ def process_file(input_file, output_file):
             writer.writerow(merged_trip)
 
 # replace this with the input and output file names
-process_file('ev_input.csv', '../../data/ev.csv')
+#process_file('ev_trips.csv', '../../data/ev.csv')
