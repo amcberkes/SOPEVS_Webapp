@@ -33,7 +33,7 @@ def process_files(input_dir, output_dir):
 
         current_date += timedelta(days=1)
 
-    output_filepath = os.path.join(output_dir, "yearly_loads.txt")
+    output_filepath = os.path.join(output_dir, "loads.txt")
     if yearly_data:
         with open(output_filepath, 'w') as f:
             for load in yearly_data:

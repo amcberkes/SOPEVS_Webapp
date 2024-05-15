@@ -2,6 +2,7 @@ import os
 import requests
 import json
 import logging
+import time
 
 # Set up basic configuration for logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -44,15 +45,15 @@ def send_request(day, month, energy_rating, number_of_habitable_rooms, house_typ
         response.raise_for_status()
         return response.json()
     except requests.exceptions.Timeout:
-        logging.error("Request timed out")
-        return "Request timed out"
+        logging.error("Request timed out, waiting for 1 minute before retrying...")
+        time.sleep(60)
+        return send_request(day, month, energy_rating, number_of_habitable_rooms, house_type)
     except requests.exceptions.HTTPError as http_err:
         logging.error(f"HTTP error occurred: {http_err} - Response: {response.text}")
         return f"HTTP error occurred: {http_err} - Response: {response.text}"
     except Exception as err:
         logging.error(f"An unexpected error occurred: {str(err)}")
         return f"An unexpected error occurred: {str(err)}"
-
 
 def fetch_data(energy_rating, number_of_habitable_rooms, house_type):
     status_messages = []
@@ -77,5 +78,5 @@ def fetch_data(energy_rating, number_of_habitable_rooms, house_type):
         return "\n".join(status_messages)
 
 # Example usage
-result = fetch_data("A/B/C", "3+", "Terraced")
-print(result)
+#result = fetch_data("A/B/C", "3+", "Terraced")
+#print(result)

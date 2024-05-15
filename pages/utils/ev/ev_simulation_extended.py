@@ -120,26 +120,40 @@ def run_simulation(args):
     ev = ElectricVehicle(args.ev_battery, args.max_soc, args.min_soc, args.consumption)
     return generate_trip_data(args, ev)
 
-def setup_ev_simulation(ev_battery, max_soc, min_soc, consumption, days, output_file):
+''' ev_battery=battery_capacity,
+            min_soc=min_soc / 100,  # Convert percentage to a decimal for the simulation
+            max_soc=max_soc / 100,  # Convert percentage to a decimal for the simulation
+            consumption=consumption,
+            C_dist=C_dist,
+            C_dept=C_dept_float,
+            C_arr=C_arr_float,
+            N_nc=N_nc,
+            wfh_days=[wfh_monday, wfh_tuesday, wfh_wednesday, wfh_thursday, wfh_friday],  # Pass as a list
+            num_days=365,  # Example number of days
+            output_file='output/ev_trips.csv'  # Specify your output file path'''
+
+# make sure that default values for all inputs are defined, make some inputs optional in FE, like C_dist
+
+def setup_ev_simulation(ev_battery, max_soc, min_soc, consumption,C_dist,C_dept,C_arr,  N_nc, wfh_days, num_days, output_file):
     class Args:
         def __init__(self):
             self.ev_battery = ev_battery
             self.max_soc = max_soc
             self.min_soc = min_soc
             self.consumption = consumption
-            self.days = days
+            self.days = num_days
             self.output = output_file
             # Set other parameters as needed or default values
-            self.C_dist = 20.0  # Default commuting distance
-            self.C_dept = 7.45  # Default departure time
-            self.C_arr = 17.30  # Default arrival time
-            self.N_nc = 5       # Default number of non-commuting trips
+            self.C_dist = C_dist  # Default commuting distance
+            self.C_dept = C_dept # Default departure time
+            self.C_arr = C_arr  # Default arrival time
+            self.N_nc = N_nc    # Default number of non-commuting trips
             # WFH days setup (Example: all false)
-            self.wfh_monday = 0
-            self.wfh_tuesday = 0
-            self.wfh_wednesday = 0
-            self.wfh_thursday = 0
-            self.wfh_friday = 0
+            self.wfh_monday = wfh_days[0]
+            self.wfh_tuesday = wfh_days[1]
+            self.wfh_wednesday = wfh_days[2]
+            self.wfh_thursday = wfh_days[3]
+            self.wfh_friday = wfh_days[4]
 
     args = Args()
     trip_data = run_simulation(args)
