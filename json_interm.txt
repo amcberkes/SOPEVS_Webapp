@@ -9,7 +9,7 @@
         "dataset": "intl",
         "timeframe": "hourly",
         "lat": "39.7392",
-        "lon": "-0.0"
+        "lon": "0.0"
     },
     "errors": [],
     "warnings": [],

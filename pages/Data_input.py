@@ -22,13 +22,10 @@ st.markdown("Please provide the necessary data for the simulation:")
 
 country = st.selectbox(
     "In which country are you located?",
-   # ("US", "UK", "Germany"),
     ("US", "Germany", "UK"),
     index=1,  # Default to UK for demonstration
     help="Select the country where you are located to tailor the input fields accordingly."
 )
-
-#st.write("You selected:", country)
 
 # Function to display inputs based on country
 def display_inputs_for_country(country):
@@ -50,7 +47,6 @@ def display_inputs_for_country(country):
     upload_file = st.file_uploader("Or upload a txt file with hourly load consumption over a year", type=['txt'], key="upload_load")
 
     # Display specific inputs based on the country
-    
     if country == "UK":
         energy_rating = st.selectbox(
            "Energy Rating",
@@ -69,9 +65,7 @@ def display_inputs_for_country(country):
         )
 
         if st.button('Fetch Load Profile'):
-            fetch_data(energy_rating, number_habitable_rooms, house_type)
             result_message = fetch_data(energy_rating, number_habitable_rooms, house_type)
-            #st.text(result_message) 
             st.success("Load profile fetched successfully")
             # call post processing 
             input_directory = 'Single_load_files_uk'
@@ -79,51 +73,27 @@ def display_inputs_for_country(country):
             process_files(input_directory, output_directory)
             st.success("Load file created")
 
-        desired_self_consumption = st.slider("Desired level of self-consumption (%)", 0, 100, 50)
+        desired_self_consumption = st.slider("Desired level of self-consumption (%)", 0, 100, 50, key="desired_self_consumption")
         optional_params = st.expander("Optional Parameters")
         with optional_params:
-            desired_robustness = st.slider("Desired robustness of the results (%)", 80, 100, 90)
-            max_pv_capacity = st.number_input("Maximum PV capacity on the roof (kW)", value=0.0)
-            max_battery_capacity = st.number_input("Maximum battery capacity (kWh)", value=0.0)
-            local_pv_price = st.number_input("Local price of PV per kW ($)", value=0.0)
-            local_battery_price = st.number_input("Local price of stationary battery per kWh ($)", value=0.0)
-
-   # else:  # US and Germany'''
-    #if country == "US" or "Germany":  # This condition is always true, replace with the actual condition as needed
-
-        # Create a numerical input field for each month of the year
-      #  average_monthly_load = {}
-       # st.write("Average Electricity Monthly Load (kWh)")
-        #average_monthly_load["January"] = st.number_input("January", value=900.0)
-       # average_monthly_load["February"] = st.number_input("February", value=800.0)
-       # average_monthly_load["March"] = st.number_input("March", value=850.0)
-       # average_monthly_load["April"] = st.number_input("April", value=750.0)
-       # average_monthly_load["May"] = st.number_input("May", value=700.0)
-       # average_monthly_load["June"] = st.number_input("June", value=850.0)
-       # average_monthly_load["July"] = st.number_input("July", value=1000.0)
-       # average_monthly_load["August"] = st.number_input("August", value=950.0)
-      #  average_monthly_load["September"] = st.number_input("September", value=800.0)
-      #  average_monthly_load["October"] = st.number_input("October", value=750.0)
-      #  average_monthly_load["November"] = st.number_input("November", value=850.0)
-      #  average_monthly_load["December"] = st.number_input("December", value=950.0)
+            desired_robustness = st.slider("Desired robustness of the results (%)", 80, 100, 90, key="desired_robustness")
+            max_pv_capacity = st.number_input("Maximum PV capacity on the roof (kW)", value=0.0, key="max_pv_capacity")
+            max_battery_capacity = st.number_input("Maximum battery capacity (kWh)", value=0.0, key="max_battery_capacity")
+            local_pv_price = st.number_input("Local price of PV per kW ($)", value=0.0, key="local_pv_price")
+            local_battery_price = st.number_input("Local price of stationary battery per kWh ($)", value=0.0, key="local_battery_price")
             
+            # Store values in session state
+            if st.button("Save Inputs"):
+                st.session_state.energy_rating = energy_rating
+                st.session_state.number_habitable_rooms = number_habitable_rooms
+                st.session_state.house_type = house_type
+                st.session_state.desired_self_consumption = desired_self_consumption
+                st.session_state.desired_robustness = desired_robustness
+                st.session_state.max_pv_capacity = max_pv_capacity
+                st.session_state.max_battery_capacity = max_battery_capacity
+                st.session_state.local_pv_price = local_pv_price
+                st.session_state.local_battery_price = local_battery_price
+                st.success("Inputs saved successfully")
 
-        # Convert average_monthly_load to a 12-value np.array
-      #  average_monthly_load_array = np.array(list(average_monthly_load.values()))
-        # Submit button
-      #  if st.button('Submit'):
-       #     run_trace_estimation(average_monthly_load_array)
-       #     st.success('Load estimation has been saved to load_us.txt')
-
-      #  desired_self_consumption = st.slider("Desired level of self-consumption (%)", 0, 100, 50)
-       # optional_params = st.expander("Optional Parameters")
-       # with optional_params:
-        #    desired_robustness = st.slider("Desired robustness of the results (%)", 80, 100, 90)
-        #    max_pv_capacity = st.number_input("Maximum PV capacity on the roof (kW)", value=0.0)
-        #    max_battery_capacity = st.number_input("Maximum battery capacity (kWh)", value=0.0)
-        #    local_pv_price = st.number_input("Local price of PV per kW ($)", value=0.0)
-        #    local_battery_price = st.number_input("Local price of stationary battery per kWh ($)", value=0.0)
-
-       
 # Render the appropriate input fields based on the selected country
 display_inputs_for_country(country)
