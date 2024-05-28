@@ -15,17 +15,40 @@ from utils.uk_load.faraday_postprocessing import process_files
 #from utils.us_load.worker_us_load import run_trace_estimation
 from utils.solar.solar import fetch_solar_data_from_api
 
+# Mapping input combinations to pre-downloaded file names
+def get_load_file_path(energy_rating, number_habitable_rooms, house_type):
+    energy_rating_map = {
+        "A/B/C": "A",
+        "D/E/F/G": "D"
+    }
+    rooms_map = {
+        "3+": "3",
+        "2": "2"
+    }
+    house_type_map = {
+        "Terraced": "Terraced",
+        "Semi-detached": "Semi",
+        "Detached": "Detached",
+    }
+    energy_letter = energy_rating_map[energy_rating]
+    rooms_number = rooms_map[number_habitable_rooms]
+    house_word = house_type_map[house_type]
+
+    loadpath = f"{energy_letter}_{rooms_number}_{house_word}.txt"
+    return loadpath
+
 
 st.set_page_config(page_title='Data Input')
 st.title("Data Input")
 st.markdown("Please provide the necessary data for the simulation:")
 
-country = st.selectbox(
-    "In which country are you located?",
-    ("US", "Germany", "UK"),
-    index=1,  # Default to UK for demonstration
-    help="Select the country where you are located to tailor the input fields accordingly."
-)
+#country = st.selectbox(
+ #  "In which country are you located?",
+  #  ("UK"),
+  #  index=1,  # Default to UK for demonstration
+   # help="Select the country where you are located to tailor the input fields accordingly."
+#)
+country = "UK"
 
 # Function to display inputs based on country
 def display_inputs_for_country(country):
@@ -60,18 +83,35 @@ def display_inputs_for_country(country):
         )
         house_type = st.selectbox(
             "House Type",
-            ("Terraced", "Semi-detached", "Detached", "Any House Types"),
+            ("Terraced", "Semi-detached", "Detached"),
             help="Select the type of house."
         )
 
-        if st.button('Fetch Load Profile'):
-            result_message = fetch_data(energy_rating, number_habitable_rooms, house_type)
-            st.success("Load profile fetched successfully")
+        #if st.button('Fetch Load Profile'):
+            #result_message = fetch_data(energy_rating, number_habitable_rooms, house_type)
+            #st.success("Load profile fetched successfully")
             # call post processing 
-            input_directory = 'Single_load_files_uk'
-            output_directory = 'pages/data/'
-            process_files(input_directory, output_directory)
-            st.success("Load file created")
+            #input_directory = 'Single_load_files_uk'
+            #output_directory = 'pages/data/'
+            #process_files(input_directory, output_directory)
+            #st.success("Load file created")
+
+        
+
+        if st.button('Fetch Load Profile'):
+            loadpath = 'pages/data/pre_downloaded_uk_load'
+            
+            # Assuming the load files are pre-downloaded in a directory named 'pre_downloaded_load_files'
+            file_name = get_load_file_path(energy_rating, number_habitable_rooms, house_type)
+            full_load_path = os.path.join(loadpath, file_name)
+
+            if os.path.exists(full_load_path):
+                #st.success(f"Load profile fetched successfully from {full_load_path}")
+                st.session_state.full_load_path = full_load_path
+                st.success("Load file created")
+            else:
+                st.error(f"Load profile for the selected inputs not found: {full_load_path}")
+
 
         desired_self_consumption = st.slider("Desired level of self-consumption (%)", 0, 100, 50, key="desired_self_consumption")
         optional_params = st.expander("Optional Parameters")

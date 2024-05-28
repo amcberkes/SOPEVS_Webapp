@@ -24,6 +24,9 @@ st.set_page_config(page_title='Results')
 # Title of the Streamlit app
 st.title("Results")
 
+load_path = st.session_state.get('full_load_path')
+
+
 # Example input data, replace with actual input collection as needed
 input_data = {
     "method": "sim",
@@ -34,7 +37,7 @@ input_data = {
     "battery_max_kwh": st.session_state.get('saved_max_battery_capacity', 25),
     "confidence_level": st.session_state.get('saved_desired_robustness', 0.85),
     "days_in_sample": 100,
-    "load_file": "pages/data/load.txt",
+    "load_file": load_path,
     "solar_file": "pages/data/solar.txt",
     "max_soc": 0.8,
     "min_soc": 0.2,

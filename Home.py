@@ -16,31 +16,30 @@ st.subheader("1. Data Input")
 st.write("""
 In the **Data Input** section, we ask you for a few inputs regarding the location and load consumpton of the single-family house.
 """)
-st.write("""
-There are additional specifications you can make for the simulation:
-- **PV model type:** tbd.
-- **tbd:** tbd. 
+#st.write("""
+#There are additional specifications you can make for the simulation:
+#- **PV model type:** tbd.
+#- **tbd:** tbd. 
 
-*Note:* By default, simulations ...
-""")
+#""")
 
 # Results Section Description
 st.subheader("2. EV and WFH inputs")
 st.markdown("##### EV")
-st.write("""
-tbd
-""")
+#st.write("""
+#tbd
+#""")
 
 st.markdown("##### WFH")
-st.write("""
-tbd
-""")
+#st.write("""
+#tbd
+#""")
 
 
 
 
 # Results Section Description
 st.subheader("3. Results")
-st.write("""
-tbd
-""")
+#st.write("""
+#tbd
+#""")
