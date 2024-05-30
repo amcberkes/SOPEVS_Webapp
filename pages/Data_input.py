@@ -49,7 +49,8 @@ country = st.selectbox(
 )
 
 st.subheader("Solar Data")
-st.markdown("Please provide your latitude and longitude to automatically compute the solar generation profile for your house. Alternatively, you can upload a txt file with hourly solar generation over a year, normalized to 1kW of PV. ")   
+st.image("sun3.jpg")
+st.markdown("Please provide your latitude and longitude to automatically compute the solar generation profile for your house with PVWatts. Alternatively, you can upload a txt file with hourly solar generation over a year, normalized to 1kW of PV. ")   
 
 
 
@@ -62,21 +63,22 @@ def display_inputs_for_country(country):
     if st.button("Submit"):
         if country == "US":
             fetch_solar_data_from_api(latitude, longitude, "pages/data/solar.txt", 1)
-        elif country == "Germany" or country == "UK":
+        elif country == "Other" or country == "UK":
             fetch_solar_data_from_api(latitude, longitude, "pages/data/solar.txt", 0)
 
     upload_file_solar = st.file_uploader("Or Upload Solar Data File", type=['txt'], key="upload_solar")
 
     st.subheader("Load Data")
+    st.image("meter.jpeg")
     # Other inputs
-    upload_file = st.file_uploader("Upload a txt file with hourly load consumption over a year", type=['txt'], key="upload_load")
+    upload_file = st.file_uploader("Upload a txt file with your hourly load consumption from at least one year:", type=['txt'], key="upload_load")
 
     
     # Display specific inputs based on the country
     if country == "UK":
         st.write("""
-Please fill out the following information about your house if you are located in the UK and do not have access to historical hourly load data. We will generate your load profile using the Faraday foundation model from the Centre for Net Zero. 
-""")
+        Please fill out the following information about your house if you are located in the UK and do not have access to historical hourly load data. We will generate your load profile using the Faraday foundation model from the Centre for Net Zero. 
+        """)
         energy_rating = st.selectbox(
            "Energy Rating",
             ("A/B/C", "D/E/F/G"),
@@ -93,53 +95,41 @@ Please fill out the following information about your house if you are located in
             help="Select the type of house."
         )
 
-        #if st.button('Fetch Load Profile'):
-            #result_message = fetch_data(energy_rating, number_habitable_rooms, house_type)
-            #st.success("Load profile fetched successfully")
-            # call post processing 
-            #input_directory = 'Single_load_files_uk'
-            #output_directory = 'pages/data/'
-            #process_files(input_directory, output_directory)
-            #st.success("Load file created")
-
-        
 
         if st.button('Fetch Load Profile'):
             loadpath = 'pages/data/pre_downloaded_uk_load'
-            
-            # Assuming the load files are pre-downloaded in a directory named 'pre_downloaded_load_files'
             file_name = get_load_file_path(energy_rating, number_habitable_rooms, house_type)
             full_load_path = os.path.join(loadpath, file_name)
 
             if os.path.exists(full_load_path):
-                #st.success(f"Load profile fetched successfully from {full_load_path}")
                 st.session_state.full_load_path = full_load_path
                 st.success("Load file created")
             else:
                 st.error(f"Load profile for the selected inputs not found: {full_load_path}")
 
-
-        desired_self_consumption = st.slider("Desired level of self-consumption (%)", 0, 100, 50, key="desired_self_consumption")
-        optional_params = st.expander("Optional Parameters")
-        with optional_params:
-            desired_robustness = st.slider("Desired robustness of the results (%)", 80, 100, 90, key="desired_robustness")
-            max_pv_capacity = st.number_input("Maximum PV capacity on the roof (kW)", value=0.0, key="max_pv_capacity")
-            max_battery_capacity = st.number_input("Maximum battery capacity (kWh)", value=0.0, key="max_battery_capacity")
-            local_pv_price = st.number_input("Local price of PV per kW ($)", value=0.0, key="local_pv_price")
-            local_battery_price = st.number_input("Local price of stationary battery per kWh ($)", value=0.0, key="local_battery_price")
+    st.subheader("Other Parameters")
+    st.markdown("Please provide your desired level of self-consumption. For example, with a level of 50% self consumption you would meet at least 50% of your load from PV generated electricity.")
+    desired_self_consumption = st.slider("Desired level of self-consumption (%)", 0, 100, 50, key="desired_self_consumption")
+    optional_params = st.expander("Optional Parameters")
+    with optional_params:
+        desired_robustness = st.slider("Desired robustness of the results (%)", 80, 100, 90, key="desired_robustness")
+        max_pv_capacity = st.number_input("Maximum PV capacity on the roof (kW)", value=0.0, key="max_pv_capacity")
+        max_battery_capacity = st.number_input("Maximum battery capacity (kWh)", value=0.0, key="max_battery_capacity")
+        local_pv_price = st.number_input("Local price of PV per kW ($)", value=0.0, key="local_pv_price")
+        local_battery_price = st.number_input("Local price of stationary battery per kWh ($)", value=0.0, key="local_battery_price")
             
-            # Store values in session state
-            if st.button("Save Inputs"):
-                st.session_state.energy_rating = energy_rating
-                st.session_state.number_habitable_rooms = number_habitable_rooms
-                st.session_state.house_type = house_type
-                st.session_state.desired_self_consumption = desired_self_consumption
-                st.session_state.desired_robustness = desired_robustness
-                st.session_state.max_pv_capacity = max_pv_capacity
-                st.session_state.max_battery_capacity = max_battery_capacity
-                st.session_state.local_pv_price = local_pv_price
-                st.session_state.local_battery_price = local_battery_price
-                st.success("Inputs saved successfully")
+        # Store values in session state
+        if st.button("Save Inputs"):
+            #st.session_state.energy_rating = energy_rating
+            #st.session_state.number_habitable_rooms = number_habitable_rooms
+            #st.session_state.house_type = house_type
+            st.session_state.desired_self_consumption = desired_self_consumption
+            st.session_state.desired_robustness = desired_robustness
+            st.session_state.max_pv_capacity = max_pv_capacity
+            st.session_state.max_battery_capacity = max_battery_capacity
+            st.session_state.local_pv_price = local_pv_price
+            st.session_state.local_battery_price = local_battery_price
+            st.success("Inputs saved successfully")
 
 # Render the appropriate input fields based on the selected country
 display_inputs_for_country(country)
