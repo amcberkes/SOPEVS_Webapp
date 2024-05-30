@@ -23,6 +23,11 @@ st.set_page_config(page_title='Results')
 
 # Title of the Streamlit app
 st.title("Results")
+st.image("results.jpeg")
+st.write("""
+Please run the simulation to get the sizing recommendations for your home energy system.
+The recommendations provided are based on minimising the total cost while achieving your desired self-consumption levels.
+""")
 
 load_path = st.session_state.get('full_load_path')
 
