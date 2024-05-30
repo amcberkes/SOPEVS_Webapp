@@ -26,7 +26,6 @@ st.title("Results")
 
 load_path = st.session_state.get('full_load_path')
 
-
 # Example input data, replace with actual input collection as needed
 input_data = {
     "method": "sim",
@@ -134,3 +133,29 @@ if st.button('Run Simulation'):
                 file_name='results_data.csv',
                 mime='text/csv',
             )
+
+            # Load and process solar data
+            solar_data = pd.read_csv(input_data['solar_file'], sep="\t", header=None)
+            solar_data = solar_data.values.reshape((365, 24)).mean(axis=0)
+
+            # Plot typical solar profile
+            fig_solar = px.line(
+                x=range(24),
+                y=solar_data,
+                title="Your Typical Solar Profile",
+                labels={"x": "Hour of Day", "y": "Average Solar Generation (kWh)"}
+            )
+            st.plotly_chart(fig_solar, use_container_width=True)
+
+            # Load and process load data
+            load_data = pd.read_csv(load_path, sep="\t", header=None)
+            load_data = load_data.values.reshape((365, 24)).mean(axis=0)
+
+            # Plot typical daily load profile
+            fig_load = px.line(
+                x=range(24),
+                y=load_data,
+                title="Your Typical Daily Load Profile",
+                labels={"x": "Hour of Day", "y": "Average Load (kWh)"}
+            )
+            st.plotly_chart(fig_load, use_container_width=True)
