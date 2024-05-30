@@ -68,7 +68,7 @@ if st.button('Run Simulation'):
             })
 
     if not chart_data_list:
-        st.error("No successful simulation results to display.")
+        st.error("No successful simulation results to display as you did not provide the correct load inputs.")
     else:
         chart_data = pd.DataFrame(chart_data_list)
 
