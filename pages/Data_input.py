@@ -40,15 +40,18 @@ def get_load_file_path(energy_rating, number_habitable_rooms, house_type):
 
 st.set_page_config(page_title='Data Input')
 st.title("Data Input")
-st.markdown("Please provide the necessary data for the simulation:")
 
-#country = st.selectbox(
- #  "In which country are you located?",
-  #  ("UK"),
-  #  index=1,  # Default to UK for demonstration
-   # help="Select the country where you are located to tailor the input fields accordingly."
-#)
-country = "UK"
+country = st.selectbox(
+   "In which country are you located?",
+    ("UK", "US", "Other"),
+    index=1,  # Default to UK for demonstration
+    help="Select the country where you are located to tailor the input fields accordingly."
+)
+
+st.subheader("Solar Data")
+st.markdown("Please provide your latitude and longitude to automatically compute the solar generation profile for your house. Alternatively, you can upload a txt file with hourly solar generation over a year, normalized to 1kW of PV. ")   
+
+
 
 # Function to display inputs based on country
 def display_inputs_for_country(country):
@@ -62,15 +65,18 @@ def display_inputs_for_country(country):
         elif country == "Germany" or country == "UK":
             fetch_solar_data_from_api(latitude, longitude, "pages/data/solar.txt", 0)
 
-    st.write("Or upload a txt file with hourly solar generation over a year, normalized to 1kW of PV.")
-    upload_file_solar = st.file_uploader("Upload Solar Data File", type=['txt'], key="upload_solar")
+    upload_file_solar = st.file_uploader("Or Upload Solar Data File", type=['txt'], key="upload_solar")
 
     st.subheader("Load Data")
     # Other inputs
-    upload_file = st.file_uploader("Or upload a txt file with hourly load consumption over a year", type=['txt'], key="upload_load")
+    upload_file = st.file_uploader("Upload a txt file with hourly load consumption over a year", type=['txt'], key="upload_load")
 
+    
     # Display specific inputs based on the country
     if country == "UK":
+        st.write("""
+Please fill out the following information about your house if you are located in the UK and do not have access to historical hourly load data. We will generate your load profile using the Faraday foundation model from the Centre for Net Zero. 
+""")
         energy_rating = st.selectbox(
            "Energy Rating",
             ("A/B/C", "D/E/F/G"),
