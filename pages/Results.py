@@ -123,7 +123,7 @@ if st.button('Run Simulation'):
             # Add x-axis and y-axis labels
             fig.update_layout(
                 xaxis_title="Self-Consumption (%)",
-                yaxis_title="Cost ($)",
+                yaxis_title="Cost (£)",
                 hovermode="x unified"
             )
 
