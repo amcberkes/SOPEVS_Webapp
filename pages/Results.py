@@ -95,7 +95,7 @@ if st.button('Run Simulation'):
             col1, col2, col3 = st.columns(3)
             col1.metric("Recommended PV Size", f"{selected_result['pv']:.1f} kW")
             col2.metric("Recommended Battery Size", f"{selected_result['battery']:.1f} kWh")
-            col3.metric("Estimated Cost", f"${selected_result['cost']:,.0f}")
+            col3.metric("Estimated Cost", f"£{selected_result['cost']:,.0f}")
 
             # Add spacing between sections
             st.write("\n")  # Add a blank line for more space
