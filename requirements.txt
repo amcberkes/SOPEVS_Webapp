@@ -1,10 +1,4 @@
 streamlit
 pandas
 numpy
-plotly.express 
-os
-json
-logging
-sys
-datetime
-pathlib 
+plotly
