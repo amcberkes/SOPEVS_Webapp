@@ -77,12 +77,12 @@ def display_inputs_for_country(country):
     # Display specific inputs based on the country
     if country == "UK":
         st.write("""
-        Please fill out the following information about your house if you are located in the UK and do not have access to historical hourly load data. We will generate your load profile using the Faraday foundation model from the Centre for Net Zero [here](https://www.centrefornetzero.org/technologies/faraday). 
+        Please fill out the following information about your house if you are located in the UK and do not have access to historical hourly load data. We will generate your load profile using the [Faraday](https://www.centrefornetzero.org/technologies/faraday) foundation model from the Centre for Net Zero . 
         """)
         energy_rating = st.selectbox(
            "Energy Rating",
             ("A/B/C", "D/E/F/G"),
-            help="Select the energy efficiency rating of your house, you can find more information about energy ratings here [here](https://energysavingtrust.org.uk/energy-ratings-everything-you-need-know/)."
+            help="Select the energy efficiency rating of your house, you can find more information about energy ratings  [here](https://energysavingtrust.org.uk/energy-ratings-everything-you-need-know/)."
         )
         number_habitable_rooms = st.selectbox(
             "Number of Habitable Rooms",
