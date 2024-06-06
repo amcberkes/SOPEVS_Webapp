@@ -60,7 +60,8 @@ def display_inputs_for_country(country):
     latitude = st.number_input("Enter Latitude", value=39.7392, key="latitude")
     longitude = st.number_input("Enter Longitude", value=-104.9903, key="longitude")
 
-    if st.button("Submit"):
+    st.write("You can find the latitude and longitude of your location by searching for your address on [Google Maps](https://www.google.com/maps). Please press the submit button after entering your location.")
+    if st.button("Submit Your Location"):
         if country == "US":
             fetch_solar_data_from_api(latitude, longitude, "pages/data/solar.txt", 1)
         elif country == "Other" or country == "UK":
