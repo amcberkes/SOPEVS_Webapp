@@ -71,18 +71,18 @@ def display_inputs_for_country(country):
     st.subheader("Load Data")
     st.image("meter.jpeg")
     # Other inputs
-    upload_file = st.file_uploader("Upload a txt file with your hourly load consumption from at least one year:", type=['txt'], key="upload_load")
+    upload_file = st.file_uploader("Upload a txt file with your hourly load consumption from at least one year (in kWh):", type=['txt'], key="upload_load")
 
     
     # Display specific inputs based on the country
     if country == "UK":
         st.write("""
-        Please fill out the following information about your house if you are located in the UK and do not have access to historical hourly load data. We will generate your load profile using the Faraday foundation model from the Centre for Net Zero. 
+        Please fill out the following information about your house if you are located in the UK and do not have access to historical hourly load data. We will generate your load profile using the Faraday foundation model from the Centre for Net Zero [here](https://www.centrefornetzero.org/technologies/faraday). 
         """)
         energy_rating = st.selectbox(
            "Energy Rating",
             ("A/B/C", "D/E/F/G"),
-            help="Select the energy efficiency rating of your house."
+            help="Select the energy efficiency rating of your house, you can find more information about energy ratings here [here](https://energysavingtrust.org.uk/energy-ratings-everything-you-need-know/)."
         )
         number_habitable_rooms = st.selectbox(
             "Number of Habitable Rooms",
